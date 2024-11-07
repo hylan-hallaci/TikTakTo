@@ -48,7 +48,7 @@ def choose():       #demande la case qu'il souhaite
     global grille
     global print_turn
     select=(int(input("Joueur 1 choisissez une case")))
-    if grille[select-1] ==" ":
+    if grille[select] ==" ":
         grille[select] = print_turn
     else: 
         print("choisissez une case vide")
