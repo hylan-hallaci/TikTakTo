@@ -1,7 +1,8 @@
-# Grille de jeu initiale
+# Grille 
 grille = [" ", " ", " ", " ", " ", " ", " ", " ", " "]
+print_turn = "X"  # Le joueur 1 commence avec "X"
 
-# Fonction pour afficher la grille
+#affichage de la grille 
 def case():
     n = 0
     global grille
@@ -13,30 +14,34 @@ def case():
         print("|")
         print("+" + ("-" * 3 + "+") * 3)
 
-# Vérifie la victoire
-def verifier_victoire(plateau, joueur):
-    combinaisons_gagnantes = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Lignes
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Colonnes
-        [0, 4, 8], [2, 4, 6]              # Diagonales
-    ]
-    for combinaison in combinaisons_gagnantes:
-        if all(plateau[i] == joueur for i in combinaison):
-            return True
+
+
+
+
+def victory():
+    global grille
+    #  lignes horizontales
+    if (grille[0] == grille[1] == grille[2] and grille[0] != " ") or \
+       (grille[3] == grille[4] == grille[5] and grille[3] != " ") or \
+       (grille[6] == grille[7] == grille[8] and grille[6] != " "):
+        return True
+    #  lignes verticales
+    if (grille[0] == grille[3] == grille[6] and grille[0] != " ") or \
+       (grille[1] == grille[4] == grille[7] and grille[1] != " ") or \
+       (grille[2] == grille[5] == grille[8] and grille[2] != " "):
+        return True
+    #  diagonales
+    if (grille[0] == grille[4] == grille[8] and grille[0] != " ") or \
+       (grille[2] == grille[4] == grille[6] and grille[2] != " "):
+        return True
     return False
 
-# Vérifie l'égalité
-def verifier_egalite(plateau):
-    return " " not in plateau
-
-# Fonction de l'IA pour choisir le meilleur coup
+# algho minimax de l'ia 
 def minimax(plateau, profondeur, is_maximizing):
-    if verifier_victoire(plateau, "O"):
-        return 1  # Score pour la victoire de l'IA
-    if verifier_victoire(plateau, "X"):
-        return -1  # Score pour la victoire du joueur
-    if verifier_egalite(plateau):
-        return 0  # Score pour l'égalité
+    if victory():  # La victoire est déjà déterminée
+        return 1 if print_turn == "O" else -1
+    if " " not in plateau:  # Match nul
+        return 0
 
     if is_maximizing:
         meilleur_score = -float("inf")
@@ -57,58 +62,76 @@ def minimax(plateau, profondeur, is_maximizing):
                 meilleur_score = min(score, meilleur_score)
         return meilleur_score
 
-def meilleur_mouvement(plateau):
+def meilleur_mouvement():
     meilleur_score = -float("inf")
     coup = -1
     for i in range(9):
-        if plateau[i] == " ":
-            plateau[i] = "O"
-            score = minimax(plateau, 0, False)
-            plateau[i] = " "
+        if grille[i] == " ":
+            grille[i] = "O"
+            score = minimax(grille, 0, False)
+            grille[i] = " "
             if score > meilleur_score:
                 meilleur_score = score
                 coup = i
     return coup
 
-# Tour du joueur
-def player_turn():
+# partie qui s'occupe du choix des cases du joueur 
+def two_players():
     global grille
-    coup = int(input("Entrez le numéro de case (0-8) pour placer votre X: "))
-    if grille[coup] == " ":
-        grille[coup] = "X"
-    else:
-        print("Case déjà prise. Choisissez une autre case.")
-        player_turn()
+    global print_turn
+    try:
+        select = int(input(f"Joueur {print_turn}, choisissez une case (1-9): ")) - 1
+        if 0 <= select <= 8 and grille[select] == " ":
+            grille[select] = print_turn
+        else:
+            print("Choisissez une case vide valide.")
+            two_players()
+    except ValueError:
+        print("Veuillez entrer un nombre entre 11 et 9.")
+        two_players()
 
 # Tour de l'IA
 def ia_turn():
     global grille
-    coup = meilleur_mouvement(grille)
+    coup = meilleur_mouvement()
     grille[coup] = "O"
-    print("L'IA a joué dans la case", coup)
+    print("L'IA a joué dans la case", coup + 1)
 
-# Boucle principale du jeu
-def jeu():
-    tour_joueur = True  # Le joueur commence
+# Changement de tour entre X et O
+def turn_chose():
+    global print_turn
+    print_turn = "O" if print_turn == "X" else "X"
+    
+
+#  jeu avec le choix de mode de jeu
+def turn():
+    mode = input("Choisissez le mode de jeu: '1' pour un joueur contre l'IA, '2' pour deux joueurs: ")
+    if mode not in ["1", "2"]:
+        print("Choix invalide. Veuillez réessayer.")
+        return turn()
+
     while True:
         case()
-        if tour_joueur:
-            player_turn()
-            if verifier_victoire(grille, "X"):
+
+        if mode == "2" or (mode == "1" and print_turn == "X"):
+            two_players()  # coup du joeur 
+            if victory():  # Vérification après le coup
                 case()
-                print("Félicitations ! Vous avez gagné !")
+                print(f"Félicitations ! Le joueur {print_turn} a gagné !")
                 break
         else:
-            ia_turn()
-            if verifier_victoire(grille, "O"):
+            ia_turn()  # coups de l'ia 
+            if victory():  # Vérification après le coup de l'IA
                 case()
                 print("L'IA a gagné !")
                 break
-        if verifier_egalite(grille):
+
+        if " " not in grille:  # Vérification de match nul
             case()
             print("Match nul !")
             break
-        tour_joueur = not tour_joueur
 
-# Lancer le jeu
-jeu()
+        turn_chose()  # Changement de joueur 
+
+turn()
+
