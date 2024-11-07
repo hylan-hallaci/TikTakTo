@@ -1,8 +1,10 @@
+
+
 # Grille de jeu initiale
 grille = [" ", " ", " ", " ", " ", " ", " ", " ", " "]
 
 # Fonction pour afficher la grille
-def case():
+def case(0):
     n = 0
     global grille
     print("+" + ("-" * 3 + "+") * 3)
