@@ -29,7 +29,7 @@ def verifier_victoire(plateau, joueur):
 def verifier_egalite(plateau):
     return " " not in plateau
 
-# Fonction de l'IA pour choisir le meilleur coup
+# Fonction de l'IA pour son coup
 def minimax(plateau, profondeur, is_maximizing):
     if verifier_victoire(plateau, "O"):
         return 1  # Score pour la victoire de l'IA
