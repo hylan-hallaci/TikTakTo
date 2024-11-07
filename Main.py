@@ -17,13 +17,3 @@ def case():                                               #grille avec support d
         print (end="\n") 
 
     print("+" + ("-" * long + "+")*4)
-def turn(verif):
-    if verif == True:
-        symbol="X"
-    else:
-        symbol = "O" 
-
-        
-
-
-    
