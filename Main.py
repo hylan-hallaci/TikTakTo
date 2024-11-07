@@ -1,5 +1,5 @@
 grille=[" "," "," "," "," "," "," "," "," "]
-
+is_ended = False
 def case():                                               #grille avec support des variables dans le terminal
  
     long = 1
@@ -17,26 +17,23 @@ def case():                                               #grille avec support d
         print (end="\n") 
 
     print("+" + ("-" * long + "+")*4)
-def turn(verif):
-    if verif == True:
-        symbol="X"
-    else:
-        symbol = "O" 
 
-def victory(grille):
-    if grille(1) !=" " and grille (2) !=" " and grille (3) !=" " and grille (4) !=" " and grille (5) !=" " and grille (6) !=" " and grille(7)!=" " and grille (8) !=" " and grille (9) !=" ":
+
+def victory():
+    global grille
+    if grille[0] !=" " and grille [1] !=" " and grille [2] !=" " and grille [3] !=" " and grille [4] !=" " and grille [5] !=" " and grille[6]!=" " and grille [7] !=" " and grille [8] !=" ":
         print("fin de partie, égalité")
         return
-    elif grille(1) == grille(2) == grille(3) and grille(1)!=" " or grille(4) == grille(5) == grille(6) and grille(4)!= " " or grille(7) == grille(8) == grille(9) and grille(8)!=0:
+    elif grille[0] == grille[1] == grille[2] and grille[0]!=" " or grille[3] == grille[4] == grille[5] and grille[3]!= " " or grille[6] == grille[7] == grille[8] and grille[7]!=0:
         print(f"victoire en ligne horizontale ! GG")
         return
-    elif grille(1) == grille(4) == grille(7) and grille(1) != " " or grille(2) == grille(5) == grille (8) and grille(5) !=" " or grille(3) == grille(6) == grille(9) and grille(3)!= 0:
+    elif grille[0] == grille[3] == grille[6] and grille[0] != " " or grille[1] == grille[4] == grille[7] and grille[4] !=" " or grille[2] == grille[5] == grille[8] and grille[2]!= 0:
         print(f"victoire en ligne vertical ! GG")
         return
-    elif grille(1) == grille(5) == grille(9) and grille(1)!=" " or grille(3) == grille(5) == grille(7) and grille(5) != " ":
-        print("victoire en diagonal ! GG")
+    elif grille[0] == grille[4] == grille[8] and grille[0]!=" " or grille[2] == grille[4] == grille[6] and grille[4] != " ":
+        print("victoire en diagonale ! GG")
         return
-        
+victory()
          
         
         
