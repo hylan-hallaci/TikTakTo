@@ -15,9 +15,6 @@ def case():
         print("+" + ("-" * 3 + "+") * 3)
 
 
-
-
-
 def victory():
     global grille
     #  lignes horizontales
@@ -37,13 +34,13 @@ def victory():
     return False
 
 # algho minimax de l'ia 
-def minimax(plateau, profondeur, is_maximizing):
+def minimax(plateau, profondeur, maximizing):
     if victory():  # La victoire est déjà déterminée
         return 1 if print_turn == "O" else -1
     if " " not in plateau:  # Match nul
         return 0
 
-    if is_maximizing:
+    if maximizing:
         meilleur_score = -float("inf")
         for i in range(9):
             if plateau[i] == " ":
@@ -75,16 +72,16 @@ def meilleur_mouvement():
                 coup = i
     return coup
 
-# partie qui s'occupe du choix des cases du joueur 
+# partie qui s'occupe du choix des cases du joueur(X OU 0) 
 def two_players():
     global grille
     global print_turn
     try:
-        select = int(input(f"Joueur {print_turn}, choisissez une case (1-9): ")) - 1
+        select = int(input(f"Joueur {print_turn}, choisissez une case  ")) - 1
         if 0 <= select <= 8 and grille[select] == " ":
             grille[select] = print_turn
         else:
-            print("Choisissez une case vide valide.")
+            print("Choisissez une case vide .")
             two_players()
     except ValueError:
         print("Veuillez entrer un nombre entre 11 et 9.")
@@ -105,9 +102,9 @@ def turn_chose():
 
 #  jeu avec le choix de mode de jeu
 def turn():
-    mode = input("Choisissez le mode de jeu: '1' pour un joueur contre l'IA, '2' pour deux joueurs: ")
+    mode = input(" '1' pour un joueur contre l'IA, '2' pour deux joueurs: ")
     if mode not in ["1", "2"]:
-        print("Choix invalide. Veuillez réessayer.")
+        print(" Veuillez réessayer.")
         return turn()
 
     while True:
@@ -117,7 +114,7 @@ def turn():
             two_players()  # coup du joeur 
             if victory():  # Vérification après le coup
                 case()
-                print(f"Félicitations ! Le joueur {print_turn} a gagné !")
+                print(f" Le joueur {print_turn} a gagné !")
                 break
         else:
             ia_turn()  # coups de l'ia 
@@ -134,4 +131,3 @@ def turn():
         turn_chose()  # Changement de joueur 
 
 turn()
-
